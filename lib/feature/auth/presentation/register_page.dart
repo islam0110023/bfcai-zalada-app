@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zalada_app/core/constants/app_colors.dart';
 import 'package:zalada_app/core/constants/app_routes.dart';
+import 'package:zalada_app/core/constants/data.dart';
 import 'package:zalada_app/core/widget/custom_button.dart';
 import 'package:zalada_app/core/widget/custom_text_input.dart';
 import 'package:zalada_app/feature/auth/logic/auth_cubit.dart';
@@ -25,13 +26,21 @@ class RegisterPage extends StatelessWidget {
             child: BlocListener<AuthCubit, AuthState>(
               listener: (context, state) {
                 if (state is RegisterLoaded) {
+                  if (context.canPop()) {
+                    context.pop();
+                  }
                   ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Success Register')));
 
                   context.go(AppRoutes.login);
                 }
-                if (state is RegisterLoading) {}
+                if (state is RegisterLoading) {
+                  ListData.showLoadingDialog(context);
+                }
                 if (state is RegisterFailure) {
+                  if (context.canPop()) {
+                    context.pop();
+                  }
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: Text(state.error)));
                 }
